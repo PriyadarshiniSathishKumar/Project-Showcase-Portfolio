@@ -1,17 +1,39 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Projects from '@/components/Projects';
 import Footer from '@/components/Footer';
 import TechBackground from '@/components/TechBackground';
 
 const Index: React.FC = () => {
+  // Add animation reveal on scroll
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-reveal');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    document.querySelectorAll('[data-animate]').forEach((el) => {
+      observer.observe(el);
+    });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
       <TechBackground />
       <Navbar />
-      <main className="pb-24">
-        <header className="min-h-[50vh] flex flex-col justify-center items-center py-28 px-4">
+      <main className="relative z-10 pb-24">
+        <header className="min-h-[50vh] flex flex-col justify-center items-center py-28 px-4" data-animate="true">
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-br from-white to-white/50 mb-6">
             Project Showcase
           </h1>

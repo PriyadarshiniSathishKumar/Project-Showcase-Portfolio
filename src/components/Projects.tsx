@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import ProjectCard from './ProjectCard';
 
 // Sample project data
 const projectsData = [
@@ -41,6 +40,28 @@ const projectsData = [
 const Projects: React.FC = () => {
   const [activeProject, setActiveProject] = useState(0);
   const projectRefs = useRef<(HTMLDivElement | null)[]>([]);
+  
+  // Set up intersection observer to detect when projects are in view
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-reveal');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    document.querySelectorAll('[data-animate]').forEach((el) => {
+      observer.observe(el);
+    });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
   
   // Set up refs for each project
   useEffect(() => {
@@ -84,7 +105,7 @@ const Projects: React.FC = () => {
               className="min-h-[60vh] flex flex-col md:flex-row items-center space-y-8 md:space-y-0 md:space-x-12"
               data-animate="true"
             >
-              <div className={`md:w-1/2 md:order-${index % 2 === 0 ? '1' : '2'}`}>
+              <div className={`md:w-1/2 ${index % 2 === 0 ? 'md:order-1' : 'md:order-2'}`}>
                 <div className="relative group">
                   <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 via-primary/40 to-primary/20 rounded-xl blur opacity-50 group-hover:opacity-75 transition duration-500"></div>
                   <div className="relative overflow-hidden rounded-xl border border-white/10">
@@ -97,9 +118,9 @@ const Projects: React.FC = () => {
                 </div>
               </div>
               
-              <div className={`md:w-1/2 md:order-${index % 2 === 0 ? '2' : '1'}`}>
+              <div className={`md:w-1/2 ${index % 2 === 0 ? 'md:order-2' : 'md:order-1'}`}>
                 <div className="space-y-6">
-                  <h2 className="text-3xl font-bold">{project.title}</h2>
+                  <h2 className="text-3xl font-bold text-white">{project.title}</h2>
                   <p className="text-lg text-white/70">{project.description}</p>
                   <div className="flex flex-wrap gap-2">
                     {project.technologies.map((tech, i) => (
