@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ProjectCard from './ProjectCard';
 
 // Sample project data
@@ -39,70 +39,106 @@ const projectsData = [
 ];
 
 const Projects: React.FC = () => {
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const [activeProject, setActiveProject] = useState(0);
+  const projectRefs = useRef<(HTMLDivElement | null)[]>([]);
   
+  // Set up refs for each project
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('animate-reveal');
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.1
-      }
-    );
-    
-    const titleElement = document.querySelector('.projects-title');
-    const descElement = document.querySelector('.projects-description');
-    
-    if (titleElement) observer.observe(titleElement);
-    if (descElement) observer.observe(descElement);
-    
-    return () => {
-      if (titleElement) observer.unobserve(titleElement);
-      if (descElement) observer.unobserve(descElement);
-    };
+    projectRefs.current = projectRefs.current.slice(0, projectsData.length);
   }, []);
+  
+  // Function to scroll to a specific project
+  const scrollToProject = (index: number) => {
+    setActiveProject(index);
+    projectRefs.current[index]?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    });
+  };
 
   return (
-    <section 
-      id="projects" 
-      ref={sectionRef}
-      className="section bg-muted/30 relative overflow-hidden"
-    >
+    <section id="projects" className="relative z-10 py-16">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="max-w-3xl mx-auto text-center mb-16">
-          <h2 className="projects-title opacity-0 mb-4">Featured Projects</h2>
-          <p className="projects-description opacity-0 text-lg text-muted-foreground">
-            A selection of my most recent and impactful work, showcasing a range of skills and technologies.
-          </p>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projectsData.map((project, index) => (
-            <ProjectCard
+        {/* Project Navigation Dots */}
+        <div className="fixed right-8 top-1/2 transform -translate-y-1/2 z-20 hidden md:flex flex-col space-y-4">
+          {projectsData.map((_, index) => (
+            <button
               key={index}
-              title={project.title}
-              description={project.description}
-              image={project.image}
-              technologies={project.technologies}
-              liveUrl={project.liveUrl}
-              githubUrl={project.githubUrl}
-              index={index}
+              onClick={() => scrollToProject(index)}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                activeProject === index 
+                  ? 'bg-primary scale-150' 
+                  : 'bg-primary/30 hover:bg-primary/50'
+              }`}
+              aria-label={`View project ${index + 1}`}
             />
           ))}
         </div>
+        
+        {/* Projects Display */}
+        <div className="space-y-32 md:space-y-64">
+          {projectsData.map((project, index) => (
+            <div 
+              key={index}
+              ref={el => projectRefs.current[index] = el}
+              className="min-h-[60vh] flex flex-col md:flex-row items-center space-y-8 md:space-y-0 md:space-x-12"
+              data-animate="true"
+            >
+              <div className={`md:w-1/2 md:order-${index % 2 === 0 ? '1' : '2'}`}>
+                <div className="relative group">
+                  <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 via-primary/40 to-primary/20 rounded-xl blur opacity-50 group-hover:opacity-75 transition duration-500"></div>
+                  <div className="relative overflow-hidden rounded-xl border border-white/10">
+                    <img 
+                      src={project.image} 
+                      alt={project.title}
+                      className="w-full h-[300px] md:h-[400px] object-cover transform transition-transform duration-700 ease-apple group-hover:scale-105"
+                    />
+                  </div>
+                </div>
+              </div>
+              
+              <div className={`md:w-1/2 md:order-${index % 2 === 0 ? '2' : '1'}`}>
+                <div className="space-y-6">
+                  <h2 className="text-3xl font-bold">{project.title}</h2>
+                  <p className="text-lg text-white/70">{project.description}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {project.technologies.map((tech, i) => (
+                      <span 
+                        key={i} 
+                        className="inline-block px-3 py-1 bg-white/10 backdrop-blur-sm border border-white/10 rounded-full text-sm"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="flex space-x-4 pt-4">
+                    {project.liveUrl && (
+                      <a 
+                        href={project.liveUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="px-6 py-2 bg-primary/90 hover:bg-primary rounded-full transition-colors duration-300"
+                      >
+                        View Live
+                      </a>
+                    )}
+                    {project.githubUrl && (
+                      <a 
+                        href={project.githubUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="px-6 py-2 bg-white/10 hover:bg-white/20 rounded-full border border-white/20 transition-colors duration-300"
+                      >
+                        GitHub
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-      
-      {/* Background decorative element */}
-      <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-gradient-to-br from-primary/5 to-transparent rounded-full filter blur-3xl -z-10 transform translate-x-1/2 -translate-y-1/2"></div>
-      <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-gradient-to-tr from-primary/5 to-transparent rounded-full filter blur-3xl -z-10 transform -translate-x-1/2 translate-y-1/2"></div>
     </section>
   );
 };

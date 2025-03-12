@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Github, Linkedin } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const Navbar: React.FC = () => {
@@ -16,25 +16,11 @@ const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navLinks = [
-    { name: 'Projects', href: '#projects' },
-    { name: 'About', href: '#about' },
-    { name: 'Contact', href: '#contact' }
-  ];
-
-  const scrollToSection = (sectionId: string) => {
-    setMobileMenuOpen(false);
-    const element = document.querySelector(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
     <header 
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-apple py-4",
-        isScrolled ? "backdrop-blur-md bg-background/80 shadow-sm" : "bg-transparent"
+        isScrolled ? "backdrop-blur-md bg-black/80 border-b border-white/10" : "bg-transparent"
       )}
     >
       <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
@@ -49,26 +35,31 @@ const Navbar: React.FC = () => {
           Portfolio
         </a>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex space-x-8">
-          {navLinks.map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              className="nav-link text-sm font-medium hover:text-primary transition-colors"
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToSection(link.href);
-              }}
-            >
-              {link.name}
-            </a>
-          ))}
-        </nav>
+        {/* Social Links */}
+        <div className="hidden md:flex items-center space-x-4">
+          <a 
+            href="https://github.com" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-white/70 hover:text-white transition-colors"
+            aria-label="GitHub"
+          >
+            <Github size={20} />
+          </a>
+          <a 
+            href="https://linkedin.com" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-white/70 hover:text-white transition-colors"
+            aria-label="LinkedIn"
+          >
+            <Linkedin size={20} />
+          </a>
+        </div>
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden button-icon p-1"
+          className="md:hidden button-icon p-1 bg-white/10 hover:bg-white/20 border border-white/20"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
         >
@@ -78,23 +69,28 @@ const Navbar: React.FC = () => {
         {/* Mobile Navigation */}
         <div 
           className={cn(
-            "fixed inset-0 bg-background/95 backdrop-blur-md z-40 flex flex-col justify-center items-center space-y-8 transition-opacity duration-300 ease-apple",
+            "fixed inset-0 bg-black/95 backdrop-blur-md z-40 flex flex-col justify-center items-center space-y-8 transition-opacity duration-300 ease-apple",
             mobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
           )}
         >
-          {navLinks.map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              className="text-2xl font-medium hover:text-primary transition-colors"
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToSection(link.href);
-              }}
-            >
-              {link.name}
-            </a>
-          ))}
+          <a 
+            href="https://github.com" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-white/70 hover:text-white transition-colors flex items-center space-x-2"
+          >
+            <Github size={24} />
+            <span>GitHub</span>
+          </a>
+          <a 
+            href="https://linkedin.com" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-white/70 hover:text-white transition-colors flex items-center space-x-2"
+          >
+            <Linkedin size={24} />
+            <span>LinkedIn</span>
+          </a>
         </div>
       </div>
     </header>

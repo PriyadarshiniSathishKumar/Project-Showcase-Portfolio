@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -113,9 +112,22 @@ export default {
 					'0%, 100%': { transform: 'translateY(0)' },
 					'50%': { transform: 'translateY(-10px)' }
 				},
-				'blur-in': {
-					'0%': { filter: 'blur(5px)', opacity: '0' },
-					'100%': { filter: 'blur(0)', opacity: '1' }
+				'float-code': {
+					'0%, 100%': { transform: 'translateY(0)' },
+					'50%': { transform: 'translateY(-15px)' }
+				},
+				'code-rain': {
+					'0%': { transform: 'translateY(-100%)', opacity: '0' },
+					'50%': { opacity: '0.5' },
+					'100%': { transform: 'translateY(100vh)', opacity: '0' }
+				},
+				'pulse-glow': {
+					'0%, 100%': { opacity: '0.6', transform: 'scale(1)' },
+					'50%': { opacity: '1', transform: 'scale(1.05)' }
+				},
+				'orbit': {
+					'0%': { transform: 'rotate(0deg) translateX(100px) rotate(0deg)' },
+					'100%': { transform: 'rotate(360deg) translateX(100px) rotate(-360deg)' }
 				}
 			},
 			animation: {
@@ -127,7 +139,10 @@ export default {
 				'slide-in': 'slide-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
 				'reveal': 'reveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
 				'float': 'float 6s ease-in-out infinite',
-				'blur-in': 'blur-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards'
+				'float-code': 'float-code 5s ease-in-out infinite',
+				'code-rain': 'code-rain 15s linear infinite',
+				'pulse-glow': 'pulse-glow 4s ease-in-out infinite',
+				'orbit': 'orbit 20s linear infinite'
 			},
 			transitionTimingFunction: {
 				'apple': 'cubic-bezier(0.2, 0.8, 0.2, 1)'
