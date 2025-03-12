@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 
-// Sample project data
+// Project data structure - you can easily add more projects here in the future
 const projectsData = [
   {
     title: 'E-commerce Dashboard',
@@ -34,7 +34,19 @@ const projectsData = [
     technologies: ['Vue.js', 'Node.js', 'MQTT'],
     liveUrl: 'https://example.com',
     githubUrl: 'https://github.com'
-  }
+  },
+  // You can add more projects here in the future by following the same format
+  // Example template for adding a new project:
+  /*
+  {
+    title: 'Project Title',
+    description: 'Short description of your project',
+    image: 'URL to your project image',
+    technologies: ['Tech1', 'Tech2', 'Tech3'],
+    liveUrl: 'https://your-live-url.com',
+    githubUrl: 'https://github.com/your-username/your-repo'
+  },
+  */
 ];
 
 const Projects: React.FC = () => {
@@ -80,21 +92,23 @@ const Projects: React.FC = () => {
   return (
     <section id="projects" className="relative z-10 py-16">
       <div className="container mx-auto px-4 md:px-6">
-        {/* Project Navigation Dots */}
-        <div className="fixed right-8 top-1/2 transform -translate-y-1/2 z-20 hidden md:flex flex-col space-y-4">
-          {projectsData.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => scrollToProject(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                activeProject === index 
-                  ? 'bg-primary scale-150' 
-                  : 'bg-primary/30 hover:bg-primary/50'
-              }`}
-              aria-label={`View project ${index + 1}`}
-            />
-          ))}
-        </div>
+        {/* Project Navigation Dots - only visible if there are more than 1 project */}
+        {projectsData.length > 1 && (
+          <div className="fixed right-8 top-1/2 transform -translate-y-1/2 z-20 hidden md:flex flex-col space-y-4">
+            {projectsData.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => scrollToProject(index)}
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  activeProject === index 
+                    ? 'bg-primary scale-150' 
+                    : 'bg-primary/30 hover:bg-primary/50'
+                }`}
+                aria-label={`View project ${index + 1}`}
+              />
+            ))}
+          </div>
+        )}
         
         {/* Projects Display */}
         <div className="space-y-32 md:space-y-64">
