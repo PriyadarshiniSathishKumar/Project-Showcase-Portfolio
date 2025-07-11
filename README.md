@@ -1,4 +1,6 @@
-# Welcome to your Lovable project
+# Project Showcase Portfolio
+<img width="1897" height="821" alt="image" src="https://github.com/user-attachments/assets/51b56d7a-1182-4e1f-aa4d-cd75e9f83eae" />
+<img width="1879" height="817" alt="image" src="https://github.com/user-attachments/assets/8158c8a6-f1e8-43a0-8b37-66753f873f49" />
 
 ## Project info
 
